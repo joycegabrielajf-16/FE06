@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://almeida-cma.github.io/fe06/t6_css_laboratorio.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎨 TEMA 06 • CSS — Folhas de Estilo em Cascata</title>
+<style>
+  :root{
+    --bg-body:#0d0716;
+    --surface-dark:#1a0f2e;
+    --surface-hover:#2a1a44;
+    --card-white:#ffffff;
+    --primary:#7c3aed;
+    --primary-hover:#6d28d9;
+    --primary-light:#a78bfa;
+    --accent:#ec4899;
+    --accent-light:#f472b6;
+    --text-dark:#0f172a;
+    --text-muted:#64748b;
+    --border-light:#e2e8f0;
+    --border-dark:#4c1d95;
+    --radius-main:20px;
+    --transicao:all .25s ease;
+    --tok-tag:#fdba74;
+    --tok-attr:#7dd3fc;
+    --tok-string:#fde047;
+    --tok-punct:#cbd5e1;
+    --tok-text:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(circle at 10% 15%,#2e0a3d 0%,#0d0716 65%);
+    color:var(--text-dark);
+    min-height:100vh;
+    padding:24px 14px 90px;
+    line-height:1.6;
+  }
+  .container{max-width:1150px;margin:0 auto;}
+
+  .header{
+    background:linear-gradient(135deg,#4c1d95 0%,#7c3aed 50%,#ec4899 100%);
+    border-radius:var(--radius-main);
+    padding:38px 24px;
+    margin-bottom:24px;
+    text-align:center;
+    color:#fff;
+    box-shadow:0 12px 35px rgba(124,58,237,.45);
+  }
+  .header h1{
+    font-size:2.1rem;
+    margin-bottom:8px;
+    letter-spacing:-.5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .header h1 span{color:#fbcfe8;}
+  .header p{opacity:.95;font-size:1.05rem;max-width:900px;margin:0 auto;}
+  .badge-group{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px;}
+  .badge{
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.3);
+    padding:5px 14px;
+    border-radius:30px;
+    font-size:.75rem;
+    font-weight:700;
+    color:#fff;
+  }
+
+  .tabs-nav{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:8px;
+    margin-bottom:22px;
+  }
+  .tab-btn{
+    background:var(--surface-dark);
+    color:#c4b5fd;
+    border:1px solid var(--border-dark);
+    padding:12px 18px;
+    border-radius:30px;
+    font-size:.88rem;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:var(--transicao);
+    font-family:inherit;
+  }
+  .tab-btn:hover{color:#fff;background:var(--surface-hover);}
+  .tab-btn.active{
+    background:linear-gradient(135deg,#6d28d9,#ec4899);
+    color:#fff;
+    border-color:#f472b6;
+    box-shadow:0 0 16px rgba(236,72,153,.45);
+  }
+  .tab-content{display:none;animation:fadeIn .3s ease-out;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .card{
+    background:var(--card-white);
+    border-radius:var(--radius-main);
+    padding:28px;
+    margin-bottom:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  .card h2{
+    color:#6d28d9;
+    margin-bottom:14px;
+    border-left:5px solid var(--primary);
+    padding-left:12px;
+    font-size:1.45rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .card h3{
+    color:#0f172a;
+    margin:22px 0 10px 0;
+    font-size:1.15rem;
+    border-bottom:2px dashed #cbd5e1;
+    padding-bottom:6px;
+  }
+  .card h4{color:#1e293b;margin:18px 0 8px 0;font-size:1rem;font-weight:700;}
+  .card p{color:#334155;margin-bottom:12px;font-size:.96rem;}
+  .card ul,.card ol{color:#334155;line-height:1.8;margin:8px 0 14px 25px;font-size:.95rem;}
+  .card li{margin-bottom:4px;}
+
+  .highlight-box{padding:16px 20px;border-radius:12px;margin:14px 0;font-size:.94rem;line-height:1.7;}
+  .highlight-box.blue{background:#e0f2fe;border-left:5px solid #0284c7;color:#0c4a6e;}
+  .highlight-box.amber{background:#fef3c7;border-left:5px solid #d97706;color:#78350f;}
+  .highlight-box.rose{background:#ffe4e6;border-left:5px solid #e11d48;color:#881337;}
+  .highlight-box.green{background:#dcfce7;border-left:5px solid #16a34a;color:#14532d;}
+  .highlight-box.purple{background:#ede9fe;border-left:5px solid #7c3aed;color:#4c1d95;}
+  .highlight-box.pink{background:#fce7f3;border-left:5px solid #ec4899;color:#831843;}
+  .highlight-box code{
+    background:rgba(255,255,255,.85);
+    border:1px solid rgba(0,0,0,.15);
+    color:#0f172a;
+    padding:2px 6px;
+    border-radius:4px;
+    font-weight:800;
+    font-family:'Courier New',monospace;
+    font-size:.88em;
+  }
+
+  code{
+    background:#f1f5f9;
+    color:#6d28d9;
+    padding:2px 6px;
+    border-radius:4px;
+    font-family:'Courier New',monospace;
+    font-weight:700;
+    font-size:.88em;
+    border:1px solid var(--border-light);
+  }
+
+  /* ============ ANATOMIA CSS — reset obrigatório de cor ============ */
+  .anatomia-css{
+    background:#0b0518;
+    border:2px solid var(--border-dark);
+    border-radius:14px;
+    padding:24px;
+    margin:18px 0;
+    font-family:'Courier New',monospace;
+    font-size:.94rem;
+    line-height:2;
+    overflow-x:auto;
+    color:#e2e8f0;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .anatomia-css code,
+  .anatomia-css span{
+    background:transparent;
+    border:0;
+    padding:0;
+    border-radius:0;
+    font-family:inherit;
+    font-size:inherit;
+    font-weight:inherit;
+    color:inherit;
+  }
+  .anatomia-css .tok-sel{color:#f472b6 !important;font-weight:800;}
+  .anatomia-css .tok-prop{color:#a78bfa !important;font-weight:700;}
+  .anatomia-css .tok-val{color:#86efac !important;font-weight:700;}
+  .anatomia-css .tok-punct{color:#cbd5e1 !important;font-weight:700;}
+  .anatomia-css .tok-tag{color:#fdba74 !important;font-weight:800;}
+  .anatomia-css .tok-attr{color:#7dd3fc !important;font-weight:700;}
+  .anatomia-css .tok-string{color:#fde047 !important;font-weight:700;}
+  .anatomia-css .tok-comment{color:#94a3b8 !important;font-style:italic;}
+  .anatomia-css .anotacao{
+    display:inline-block;
+    background:rgba(167,139,250,.15);
+    border-left:3px solid #a78bfa;
+    color:#c4b5fd;
+    padding:1px 10px;
+    border-radius:4px;
+    font-size:.78rem;
+    margin-left:12px;
+    font-family:'Segoe UI',sans-serif;
+    font-style:italic;
+  }
+
+  /* ============ CARDS DAS FORMAS DE APLICAR ============ */
+  .formas-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:16px;
+    margin:18px 0;
+  }
+  .forma-card{
+    background:#f8fafc;
+    border:2px solid var(--border-light);
+    border-radius:14px;
+    padding:18px 20px;
+    display:flex;
+    flex-direction:column;
+  }
+  .forma-card.inline{border-color:#f472b6;}
+  .forma-card.interno{border-color:#a78bfa;}
+  .forma-card.externo{border-color:#38bdf8;}
+  .forma-card h4{
+    margin:0 0 10px 0;
+    font-size:.95rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .forma-card.inline h4{color:#831843;}
+  .forma-card.interno h4{color:#4c1d95;}
+  .forma-card.externo h4{color:#075985;}
+  .forma-card p{font-size:.85rem;color:#475569;margin-bottom:8px;}
+  .forma-card .preview{
+    margin-top:auto;
+    padding:10px;
+    background:#fff;
+    border:1px dashed #cbd5e1;
+    border-radius:8px;
+    text-align:center;
+    font-size:.88rem;
+  }
+
+  /* ============ SIMULADOR DE SELETORES ============ */
+  .simulador-seletores{
+    background:#f8fafc;
+    border:2px solid var(--border-light);
+    border-radius:14px;
+    padding:20px;
+    margin:16px 0;
+  }
+  .simulador-seletores h4{color:#6d28d9;font-size:1rem;margin-bottom:12px;}
+
+  .html-alvo{
+    background:#ffffff;
+    border:2px dashed #cbd5e1;
+    border-radius:10px;
+    padding:18px 22px;
+    font-family:'Courier New',monospace;
+    font-size:.92rem;
+    line-height:1.9;
+    color:#0f172a;
+    overflow-x:auto;
+  }
+  .html-alvo > *{
+    display:block;
+    padding:4px 8px;
+    border-radius:6px;
+    margin:3px 0;
+    transition:background-color .3s ease, box-shadow .3s ease;
+  }
+  .html-alvo h1{font-size:1.25rem;font-weight:800;color:#0f172a;margin:3px 0;}
+  .html-alvo p{font-size:.95rem;font-weight:400;color:#334155;margin:3px 0;}
+  .html-alvo img{max-width:120px;height:auto;border-radius:6px;display:block;}
+  .html-alvo a{
+    color:#0284c7;
+    font-weight:700;
+    text-decoration:underline;
+    display:inline-block;
+    padding:4px 8px;
+    cursor:pointer;
+  }
+  .html-alvo a:hover{color:#dc2626;}
+
+  .html-alvo .alvo-sel{
+    background:#fef08a;
+    box-shadow:0 0 0 2px #eab308 inset;
+  }
+  .html-alvo a.alvo-sel{
+    background:#fef08a;
+    color:#dc2626;
+  }
+
+  /* ============ TABELA DE SELETORES ============ */
+  table.tabela{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.88rem;
+    margin:16px 0;
+    background:#fff;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  table.tabela thead tr{
+    background:linear-gradient(135deg,#4c1d95,#ec4899);
+    color:#fff;
+  }
+  table.tabela th{
+    padding:12px 14px;
+    text-align:left;
+    font-weight:800;
+    font-size:.85rem;
+  }
+  table.tabela td{
+    padding:10px 14px;
+    border-bottom:1px solid #e2e8f0;
+    color:#334155;
+    vertical-align:top;
+  }
+  table.tabela tbody tr:hover{background:#f8fafc;}
+  table.tabela tbody tr:last-child td{border-bottom:none;}
+
+  /* ============ DEMONSTRAÇÃO BOX MODEL ============ */
+  .boxmodel-visual{
+    background:#0b0518;
+    border:2px solid var(--border-dark);
+    border-radius:16px;
+    padding:22px;
+    margin:20px 0;
+    overflow-x:auto;
+  }
+  .boxmodel-container{
+    max-width:420px;
+    margin:0 auto;
+    background:#fef3c7;
+    border:3px solid #d97706;
+    padding:24px;
+    position:relative;
+    text-align:center;
+    font-weight:700;
+    color:#78350f;
+  }
+  .boxmodel-container::before{
+    content:'MARGIN';
+    position:absolute;
+    top:4px;
+    left:8px;
+    font-size:.7rem;
+    color:#b45309;
+    letter-spacing:1px;
+  }
+  .boxmodel-border{
+    background:#fce7f3;
+    border:4px solid #ec4899;
+    padding:20px;
+    position:relative;
+  }
+  .boxmodel-border::before{
+    content:'BORDER';
+    position:absolute;
+    top:2px;
+    left:8px;
+    font-size:.7rem;
+    color:#be185d;
+    letter-spacing:1px;
+  }
+  .boxmodel-padding{
+    background:#ede9fe;
+    border:2px dashed #7c3aed;
+    padding:20px;
+    position:relative;
+  }
+  .boxmodel-padding::before{
+    content:'PADDING';
+    position:absolute;
+    top:2px;
+    left:8px;
+    font-size:.7rem;
+    color:#6d28d9;
+    letter-spacing:1px;
+  }
+  .boxmodel-content{
+    background:#dbeafe;
+    border:2px solid #0284c7;
+    padding:18px 10px;
+    position:relative;
+    color:#0c4a6e;
+    font-size:.9rem;
+  }
+  .boxmodel-content::before{
+    content:'CONTENT';
+    position:absolute;
+    top:2px;
+    left:8px;
+    font-size:.7rem;
+    color:#075985;
+    letter-spacing:1px;
+  }
+
+  /* ============ DEMO AO VIVO ============ */
+  .demo-aovivo{
+    background:#f8fafc;
+    border:2px solid var(--border-light);
+    border-radius:14px;
+    margin:18px 0;
+    overflow:hidden;
+  }
+  .demo-topo{
+    background:#0b0518;
+    color:#c4b5fd;
+    padding:8px 14px;
+    font-family:'Courier New',monospace;
+    font-size:.78rem;
+    font-weight:700;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .demo-topo span:first-child::before{content:'🌐 ';}
+  .demo-corpo{
+    padding:20px;
+    min-height:80px;
+    background:#fff;
+  }
+  .demo-corpo .alvo-demo{
+    padding:20px;
+    border-radius:8px;
+    transition:all .4s ease;
+    font-size:1rem;
+    text-align:center;
+  }
+
+  .controle-cor{
+    background:#f8fafc;
+    border:2px solid var(--border-light);
+    border-radius:12px;
+    padding:16px;
+    margin:12px 0;
+  }
+  .controle-cor label{
+    display:block;
+    color:#6d28d9;
+    font-weight:700;
+    font-size:.85rem;
+    margin-bottom:8px;
+  }
+  .controle-cor input[type="color"]{
+    width:100%;
+    height:50px;
+    border:2px solid #cbd5e1;
+    border-radius:8px;
+    cursor:pointer;
+    background:#fff;
+  }
+  .presets-cores{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  .presets-cores button{
+    width:34px;
+    height:34px;
+    border:3px solid #fff;
+    border-radius:50%;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    transition:transform .2s;
+  }
+  .presets-cores button:hover{transform:scale(1.15);}
+
+  /* ============ CABEÇALHO DO LAB ============ */
+  .code-wrapper{
+    position:relative;
+    margin:18px 0;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid var(--border-dark);
+    background:#0b0518;
+  }
+  .code-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#1a0f2e;
+    padding:10px 16px;
+    border-bottom:1px solid var(--border-dark);
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .code-title{
+    color:#f472b6;
+    font-size:.84rem;
+    font-weight:700;
+    font-family:monospace;
+  }
+  .code-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .code-actions button{
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:.76rem;
+    font-weight:700;
+    transition:var(--transicao);
+    font-family:inherit;
+  }
+  .copy-btn{background:#10b981;color:#042f2e;}
+  .copy-btn:hover{background:#059669;color:#fff;}
+  .run-inline-btn{background:#c026d3;color:#fff;}
+  .run-inline-btn:hover{background:#a21caf;}
+  .download-btn{background:#8b5cf6;color:#fff;}
+  .download-btn:hover{background:#7c3aed;}
+  .code-pane{
+    padding:18px 20px;
+    color:#e2e8f0;
+    font-family:'Courier New',monospace;
+    font-size:.82rem;
+    line-height:1.65;
+    overflow-x:auto;
+    white-space:pre;
+    max-height:520px;
+  }
+  .preview-inline{
+    margin:14px 0;
+    border:1px solid var(--border-dark);
+    border-radius:12px;
+    overflow:hidden;
+    background:#0b0518;
+  }
+  .preview-inline .preview-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 12px;
+    background:#1a0f2e;
+    border-bottom:1px solid #1e293b;
+    color:#c4b5fd;
+    font-size:.78rem;
+    font-weight:700;
+    font-family:monospace;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .preview-inline .preview-close{
+    background:transparent;
+    border:1px solid #334155;
+    color:#f87171;
+    padding:3px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:.72rem;
+    font-weight:700;
+    font-family:inherit;
+  }
+  .preview-inline iframe{
+    width:100%;
+    height:520px;
+    border:none;
+    background:#fff;
+    display:block;
+  }
+
+  /* ============ ETAPAS ============ */
+  .etapa-card{
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:22px;
+    background:#f8fafc;
+    border:2px solid var(--border-light);
+    position:relative;
+  }
+  .etapa-card::before{
+    content:attr(data-etapa);
+    position:absolute;
+    top:-14px;
+    left:20px;
+    background:var(--etapa-cor, #7c3aed);
+    color:#fff;
+    padding:5px 16px;
+    border-radius:20px;
+    font-size:.75rem;
+    font-weight:900;
+    letter-spacing:.5px;
+  }
+  .etapa-card h3{margin-top:6px;border:0;padding:0;font-size:1.1rem;color:#0f172a;margin-bottom:12px;}
+  .etapa-card[data-num="1"]{--etapa-cor:#0284c7;}
+  .etapa-card[data-num="2"]{--etapa-cor:#7c3aed;}
+  .etapa-card[data-num="3"]{--etapa-cor:#ec4899;}
+  .etapa-card[data-num="4"]{--etapa-cor:#d97706;}
+  .etapa-card[data-num="5"]{--etapa-cor:#16a34a;}
+  .etapa-card[data-num="6"]{--etapa-cor:#dc2626;}
+
+  /* ============ QUIZ ============ */
+  .quiz-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    background:#1a0f2e;
+    color:#fff;
+    padding:14px 20px;
+    border-radius:12px;
+    margin-bottom:20px;
+  }
+  .quiz-header .progresso-texto{font-size:.9rem;}
+  .barra-quiz{
+    flex:1;
+    min-width:140px;
+    height:10px;
+    background:#4c1d95;
+    border-radius:5px;
+    overflow:hidden;
+  }
+  .barra-quiz-preenchimento{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#a78bfa,#f472b6);
+    transition:width .3s;
+  }
+  .question{
+    background:#f8fafc;
+    border-radius:12px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    border-left:4px solid var(--primary);
+    border-top:1px solid var(--border-light);
+    border-right:1px solid var(--border-light);
+    border-bottom:1px solid var(--border-light);
+  }
+  .question-header{
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:12px;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:.96rem;
+    line-height:1.5;
+  }
+  .question-number{
+    background:var(--primary);
+    color:#fff;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    text-align:center;
+    line-height:26px;
+    font-size:12px;
+    font-weight:bold;
+    flex-shrink:0;
+    margin-top:2px;
+  }
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .option{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    background:#fff;
+    border-radius:8px;
+    border:2px solid var(--border-light);
+    cursor:pointer;
+    transition:var(--transicao);
+    font-size:.9rem;
+    color:#334155;
+  }
+  .option:hover:not(.disabled){
+    border-color:var(--primary);
+    background:#ede9fe;
+    transform:translateX(3px);
+  }
+  .option.correct{border-color:#16a34a !important;background:#dcfce7 !important;}
+  .option.wrong{border-color:#dc2626 !important;background:#fee2e2 !important;}
+  .option.disabled{cursor:default;opacity:.92;}
+  .feedback-imediato{
+    display:none;
+    margin-top:12px;
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:.88rem;
+    line-height:1.6;
+  }
+  .feedback-imediato.mostrar{display:block;}
+  .feedback-imediato.ok{background:#dcfce7;color:#14532d;border-left:4px solid #16a34a;}
+  .feedback-imediato.no{background:#fee2e2;color:#881337;border-left:4px solid #dc2626;}
+  .results{
+    background:#fff;
+    border:2px solid #ec4899;
+    border-radius:12px;
+    padding:18px 22px;
+    margin-top:20px;
+    display:none;
+  }
+  .results.mostrar{display:block;}
+
+  .btn-grupo{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:22px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    background:linear-gradient(135deg,var(--primary),#ec4899);
+    color:#fff;
+    border:none;
+    padding:12px 26px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:.95rem;
+    font-weight:700;
+    transition:var(--transicao);
+    font-family:inherit;
+  }
+  .btn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(124,58,237,.4);
+  }
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+  .btn-secondary{background:#64748b;}
+
+  .toast-notificacao{
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    background:#7c3aed;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:bold;
+    font-size:.85rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+    display:none;
+    z-index:9999;
+    animation:slideUp .3s ease;
+    max-width:340px;
+    line-height:1.5;
+  }
+  @keyframes slideUp{
+    from{transform:translateY(20px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+  }
+  .btn-top{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:50px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+    box-shadow:0 4px 15px rgba(0,0,0,.25);
+    z-index:100;
+  }
+
+  @media (max-width:768px){
+    .header h1{font-size:1.6rem;}
+    .card{padding:18px 14px;}
+    .tab-btn{padding:10px 14px;font-size:.8rem;}
+    .formas-grid{grid-template-columns:1fr;}
+    .preview-inline iframe{height:440px;}
+    .anatomia-css{font-size:.8rem;padding:16px;}
+    .boxmodel-visual{padding:14px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="inicio">
+  <header class="header">
+    <h1>🎨 TEMA <span>06</span> • CSS</h1>
+    <p>Folhas de Estilo em Cascata — como dar aparência, layout e cor ao HTML, do primeiro seletor até a organização profissional</p>
+    <div class="badge-group">
+      <span class="badge">📐 Anatomia de regra</span>
+      <span class="badge">🎯 Seletores</span>
+      <span class="badge">📝 Fontes e texto</span>
+      <span class="badge">📦 Box model</span>
+      <span class="badge">🧪 Experimentos</span>
+      <span class="badge">📋 Avaliação</span>
+    </div>
+  </header>
+
+  <nav class="tabs-nav">
+    <button type="button" class="tab-btn" data-aba="aba-intro">🎨 1. O que é CSS</button>
+    <button type="button" class="tab-btn" data-aba="aba-anatomia">📐 2. Anatomia</button>
+    <button type="button" class="tab-btn" data-aba="aba-seletores">🎯 3. Seletores</button>
+    <button type="button" class="tab-btn" data-aba="aba-estilo">📝 4. Fontes e Texto</button>
+    <button type="button" class="tab-btn" data-aba="aba-box">📦 5. Box Model</button>
+    <button type="button" class="tab-btn" data-aba="aba-lab">💻 6. Laboratório</button>
+    <button type="button" class="tab-btn active" data-aba="aba-avaliacao">📋 7. Avaliação</button>
+  </nav>
+
+  <!-- ============ ABA 1 — O QUE É CSS ============ -->
+  <div id="aba-intro" class="tab-content">
+    <section class="card">
+      <h2>🎨 O que é CSS e por que ele existe</h2>
+
+      <div class="highlight-box purple">
+        <strong>💡 Conceito fundamental:</strong> <strong>CSS</strong> significa <em>Cascading Style Sheets</em> — Folhas de Estilo em Cascata. Não é linguagem de programação (não tem laços nem condicionais) nem linguagem de marcação (não estrutura conteúdo). É uma <strong>linguagem de folhas de estilo</strong>: descreve como os elementos HTML devem ser <em>apresentados</em> ao usuário.
+      </div>
+
+      <p>Sem CSS, toda página fica com a aparência padrão do navegador: fonte Times New Roman, fundo branco, links azuis sublinhados, tabelas com bordas cruas. CSS é o que transforma essa estrutura crua em um produto visual: cores, margens, tipografia, sombras, posicionamento.</p>
+
+      <h3>🧭 A divisão de responsabilidades da web moderna</h3>
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Camada</th>
+            <th>Linguagem</th>
+            <th>Responsabilidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Estrutura</strong></td>
+            <td>HTML</td>
+            <td>Define <em>o que</em> cada elemento é: título, parágrafo, tabela, formulário.</td>
+          </tr>
+          <tr>
+            <td><strong>Apresentação</strong></td>
+            <td>CSS</td>
+            <td>Define <em>como</em> cada elemento aparece: cor, tamanho, espaçamento, posição.</td>
+          </tr>
+          <tr>
+            <td><strong>Comportamento</strong></td>
+            <td>JavaScript</td>
+            <td>Define <em>o que acontece</em> quando o usuário clica, digita, redimensiona.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Essa separação é chamada de <strong>separação de responsabilidades</strong>. Não é só uma questão de organização: um mesmo documento HTML pode ter centenas de aparências diferentes trocando apenas a folha de estilo.</p>
+
+      <div class="highlight-box blue">
+        <strong>🔍 O nome "cascata" importa:</strong> quando várias regras CSS apontam para o mesmo elemento e se contradizem, o navegador resolve o conflito seguindo uma hierarquia de precedência (a "cascata"). A regra mais "forte" vence.
+      </div>
+
+      <h3>🔗 Por que CSS foi necessário</h3>
+      <p>Antes do CSS, toda a aparência era definida por atributos dentro das próprias tags HTML: <code>&lt;font color="red"&gt;</code>, <code>&lt;center&gt;</code>, <code>&lt;table bgcolor="..."&gt;</code>. Isso gerava dois problemas:</p>
+      <ul>
+        <li><strong>HTML poluído:</strong> estrutura e aparência se misturavam na mesma tag.</li>
+        <li><strong>Manutenção impossível:</strong> mudar a cor de todos os títulos exigia abrir arquivo por arquivo.</li>
+      </ul>
+      <p>Com CSS, a regra fica declarada em um único lugar e vale para todo o site. Mudar a cor de todos os títulos de um site de 50 páginas é uma alteração de uma linha.</p>
+    </section>
+  </div>
+
+  <!-- ============ ABA 2 — ANATOMIA ============ -->
+  <div id="aba-anatomia" class="tab-content">
+    <section class="card">
+      <h2>📐 Anatomia de uma regra CSS</h2>
+
+      <p>Toda regra CSS tem uma estrutura simples e consistente. Entender cada parte da anatomia é o primeiro passo — sem isso, você copia código mas não consegue adaptá-lo.</p>
+
+      <h3>🧬 A regra desmontada parte por parte</h3>
+      <div class="anatomia-css"><span class="tok-sel">p</span> <span class="tok-punct">{</span> <span class="anotacao">seletor + chave de abertura</span>
+  <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">red</span><span class="tok-punct">;</span> <span class="anotacao">propriedade + valor + ponto e vírgula</span>
+  <span class="tok-prop">font-size</span><span class="tok-punct">:</span> <span class="tok-val">18px</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span> <span class="anotacao">chave de fechamento</span></div>
+
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Exemplo</th>
+            <th>Função</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Seletor</strong></td>
+            <td><code>p</code></td>
+            <td>Escolhe <em>quais</em> elementos HTML a regra afeta.</td>
+          </tr>
+          <tr>
+            <td><strong>Chave de abertura</strong></td>
+            <td><code>{</code></td>
+            <td>Inicia o bloco de declarações.</td>
+          </tr>
+          <tr>
+            <td><strong>Propriedade</strong></td>
+            <td><code>color</code></td>
+            <td>O que está sendo alterado (cor, tamanho, margem...).</td>
+          </tr>
+          <tr>
+            <td><strong>Dois-pontos</strong></td>
+            <td><code>:</code></td>
+            <td>Separa a propriedade do seu valor.</td>
+          </tr>
+          <tr>
+            <td><strong>Valor</strong></td>
+            <td><code>red</code></td>
+            <td>Combinar ao quê a propriedade deve assumir.</td>
+          </tr>
+          <tr>
+            <td><strong>Ponto e vírgula</strong></td>
+            <td><code>;</code></td>
+            <td>Encerra uma declaração. Separa de outra.</td>
+          </tr>
+          <tr>
+            <td><strong>Chave de fechamento</strong></td>
+            <td><code>}</code></td>
+            <td>Finaliza o bloco da regra.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box amber">
+        <strong>⚠️ Ponto e vírgula é obrigatório entre declarações:</strong> esqueça o <code>;</code> na primeira declaração de uma regra e a segunda se junta a ela em um valor inválido, fazendo a regra inteira ser ignorada.
+      </div>
+
+      <h3>📚 Várias declarações, mesma regra</h3>
+      <p>Uma única regra pode agrupar quantas declarações você quiser. Cada propriedade ocupa sua própria linha para facilitar a leitura:</p>
+      <div class="anatomia-css"><span class="tok-sel">p</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">red</span><span class="tok-punct">;</span>
+  <span class="tok-prop">width</span><span class="tok-punct">:</span> <span class="tok-val">500px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">border</span><span class="tok-punct">:</span> <span class="tok-val">1px solid black</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      <p>Isso significa: todo parágrafo da página terá texto vermelho, largura de 500 pixels e borda preta sólida de 1 pixel em todos os lados.</p>
+
+      <h3>📎 As três formas de aplicar CSS a um HTML</h3>
+      <p>Existem três formas de conectar uma folha de estilo a um documento. Cada uma tem seu uso específico:</p>
+
+      <div class="formas-grid">
+        <div class="forma-card inline">
+          <h4>1. Inline</h4>
+          <p>O estilo vai dentro do atributo <code>style</code> do próprio elemento.</p>
+          <div class="preview" style="color:#be185d;font-weight:bold;">Texto rosa</div>
+          <p style="margin-top:10px;font-size:.78rem;color:#64748b;font-family:monospace;word-break:break-all;">&lt;p style="color:#be185d;"&gt;</p>
+          <p style="font-size:.78rem;margin:6px 0 0 0;"><strong>Quando usar:</strong> ajuste ultra-específico em uma única ocorrência. Raramente recomendado.</p>
+        </div>
+        <div class="forma-card interno">
+          <h4>2. Interno (embed)</h4>
+          <p>O CSS vai dentro de uma tag <code>&lt;style&gt;</code> no <code>&lt;head&gt;</code> do documento.</p>
+          <div class="preview" style="color:#6d28d9;font-weight:bold;">Texto roxo</div>
+          <p style="margin-top:10px;font-size:.78rem;color:#64748b;font-family:monospace;word-break:break-all;">&lt;style&gt;p{color:#6d28d9}&lt;/style&gt;</p>
+          <p style="font-size:.78rem;margin:6px 0 0 0;"><strong>Quando usar:</strong> página única, experimentos rápidos.</p>
+        </div>
+        <div class="forma-card externo">
+          <h4>3. Externo</h4>
+          <p>O CSS vai em um arquivo à parte, conectado por <code>&lt;link&gt;</code>.</p>
+          <div class="preview" style="color:#075985;font-weight:bold;">Texto azul</div>
+          <p style="margin-top:10px;font-size:.78rem;color:#64748b;font-family:monospace;word-break:break-all;">&lt;link rel="stylesheet" href="estilo.css"&gt;</p>
+          <p style="font-size:.78rem;margin:6px 0 0 0;"><strong>Quando usar:</strong> prática profissional. Um único arquivo vale para N páginas.</p>
+        </div>
+      </div>
+
+      <div class="highlight-box green">
+        <strong>✅ Recomendação profissional:</strong> use <strong>externo</strong> para quase tudo. O navegador cacheia o arquivo <code>.css</code>, o que deixa o carregamento mais rápido nas próximas páginas do mesmo site.
+      </div>
+
+      <h3>⚖️ Precedência: quem ganha quando duas regras conflitam</h3>
+      <p>Quando duas ou mais regras apontam para o mesmo elemento e alteram a mesma propriedade, o navegador decide pela seguinte ordem de prioridade — do mais forte para o mais fraco:</p>
+      <ol>
+        <li><strong>Estilo inline</strong> (atributo <code>style="..."</code>) — vence quase sempre.</li>
+        <li><strong>Seletor de ID</strong> (<code>#nome</code>) — vence sobre classe e elemento.</li>
+        <li><strong>Seletor de classe</strong> (<code>.classe</code>) — vence sobre elemento.</li>
+        <li><strong>Seletor de elemento/tag</strong> (<code>p</code>, <code>h1</code>) — vence sobre herdado.</li>
+        <li><strong>Estilo herdado</strong> do elemento pai — a base mais fraca.</li>
+      </ol>
+      <p>Essa hierarquia é chamada de <strong>especificidade</strong>. Explicaremos os seletores com mais detalhe na próxima aba.</p>
+    </section>
+  </div>
+
+  <!-- ============ ABA 3 — SELETORES ============ -->
+  <div id="aba-seletores" class="tab-content">
+    <section class="card">
+      <h2>🎯 Seletores: escolhendo o alvo</h2>
+
+      <p>O seletor é o que decide <em>quais elementos</em> serão afetados por uma regra. Existem vários tipos, cada um com um alcance diferente.</p>
+
+      <h3>📋 Os principais tipos de seletor</h3>
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Sintaxe</th>
+            <th>O que seleciona</th>
+            <th>Exemplo de HTML afetado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Elemento (tag)</strong></td>
+            <td><code>p</code></td>
+            <td>Todos os elementos de um tipo.</td>
+            <td><code>&lt;p&gt;Texto&lt;/p&gt;</code></td>
+          </tr>
+          <tr>
+            <td><strong>ID</strong></td>
+            <td><code>#titulo</code></td>
+            <td>O único elemento com aquele ID.</td>
+            <td><code>&lt;h1 id="titulo"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><strong>Classe</strong></td>
+            <td><code>.destaque</code></td>
+            <td>Todos os elementos com aquela classe.</td>
+            <td><code>&lt;p class="destaque"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><strong>Atributo</strong></td>
+            <td><code>img[src]</code></td>
+            <td>Elementos que possuem aquele atributo.</td>
+            <td><code>&lt;img src="foto.jpg"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><strong>Pseudo-classe</strong></td>
+            <td><code>a:hover</code></td>
+            <td>Elemento em um estado específico.</td>
+            <td><code>&lt;a&gt;</code> quando o mouse está sobre ele.</td>
+          </tr>
+          <tr>
+            <td><strong>Universal</strong></td>
+            <td><code>*</code></td>
+            <td>Todos os elementos da página.</td>
+            <td>Todo mundo.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>🧪 Simulador: veja o seletor em ação</h3>
+      <p>Escolha um seletor abaixo e veja, em amarelo, quais elementos do HTML de exemplo são afetados por ele.</p>
+
+      <div class="simulador-seletores">
+        <h4>🔍 Selecione um seletor</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+          <button type="button" class="btn-sel" data-sel="p" style="background:#7c3aed;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;">p</button>
+          <button type="button" class="btn-sel" data-sel="id" style="background:#ec4899;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;">#titulo</button>
+          <button type="button" class="btn-sel" data-sel="classe" style="background:#0284c7;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;">.destaque</button>
+          <button type="button" class="btn-sel" data-sel="attr" style="background:#16a34a;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;">img[src]</button>
+          <button type="button" class="btn-sel" data-sel="hover" style="background:#d97706;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;">a:hover</button>
+        </div>
+
+        <div class="html-alvo" id="html-simulador">
+          <h1 id="sim-h1">Título Principal</h1>
+          <p id="sim-p1">Parágrafo comum</p>
+          <p id="sim-p2" class="destaque">Parágrafo destacado</p>
+          <a id="sim-a" href="https://almeida-cma.github.io/fe06/t6_css_laboratorio.html#">Link</a>
+          <img id="sim-img" src="./🎨 TEMA 06 • CSS — Folhas de Estilo em Cascata_files/24-120x60.jpg" alt="Foto">
+        </div>
+
+        <div id="resultado-seletor" style="margin-top:14px;padding:12px 16px;background:#fff;border-radius:8px;border-left:4px solid #7c3aed;font-size:.88rem;color:#334155;line-height:1.6;">
+          <strong>Dica:</strong> clique em um dos botões acima para destacar quais elementos cada seletor pega.
+        </div>
+      </div>
+
+      <div class="highlight-box pink">
+        <strong>💡 Boa prática:</strong> classes (<code>.nome</code>) podem se repetir quantas vezes quiser na página e são o seletor mais versátil. IDs (<code>#nome</code>) devem ser únicos — um por página. Para a maioria dos estilos, use <strong>classes</strong>.
+      </div>
+
+      <h3>🎨 Agrupando seletores</h3>
+      <p>Quando várias regras são idênticas, você pode agrupá-las em uma só, separando os seletores por vírgula:</p>
+      <div class="anatomia-css"><span class="tok-sel">h1, h2, p, li</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">red</span><span class="tok-punct">;</span>
+  <span class="tok-prop">font-family</span><span class="tok-punct">:</span> <span class="tok-val">Arial, sans-serif</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      <p>Isso aplica a mesma cor e fonte a todos os <code>h1</code>, <code>h2</code>, <code>p</code> e <code>li</code> de uma só vez.</p>
+
+      <div class="highlight-box amber">
+        <strong>⚠️ Vírgula não é o mesmo que espaço:</strong> <code>h1, p</code> (com vírgula) pega todos os <code>h1</code> e todos os <code>p</code> de forma independente. Já <code>header p</code> (com espaço) pega apenas os <code>p</code> que estão <em>dentro</em> de um <code>header</code>.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 4 — FONTES E TEXTO ============ -->
+  <div id="aba-estilo" class="tab-content">
+    <section class="card">
+      <h2>📝 Fontes e Texto</h2>
+
+      <p>As propriedades de tipografia são as mais usadas no dia a dia. Dominar essas dá a maior parte do controle visual imediato.</p>
+
+      <h3>🔤 Propriedades de fonte</h3>
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Propriedade</th>
+            <th>Valores comuns</th>
+            <th>Efeito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>font-family</code></td>
+            <td><code>Arial, sans-serif</code></td>
+            <td>Define a família da fonte. Use fallback com vírgula.</td>
+          </tr>
+          <tr>
+            <td><code>font-size</code></td>
+            <td><code>16px</code>, <code>1.2rem</code>, <code>large</code></td>
+            <td>Tamanho do texto. <code>rem</code> é relativo à raiz.</td>
+          </tr>
+          <tr>
+            <td><code>font-weight</code></td>
+            <td><code>normal</code>, <code>bold</code>, <code>700</code></td>
+            <td>Espessura. 100 a 900, múltiplos de 100.</td>
+          </tr>
+          <tr>
+            <td><code>font-style</code></td>
+            <td><code>normal</code>, <code>italic</code></td>
+            <td>Itálico (inclina a fonte).</td>
+          </tr>
+          <tr>
+            <td><code>font-variant</code></td>
+            <td><code>normal</code>, <code>small-caps</code></td>
+            <td>Versalete: maiúsculas menores.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>🎨 Propriedades de texto</h3>
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Propriedade</th>
+            <th>Valores</th>
+            <th>Efeito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>color</code></td>
+            <td><code>red</code>, <code>#c2410c</code>, <code>rgb(0,0,0)</code></td>
+            <td>Cor do texto.</td>
+          </tr>
+          <tr>
+            <td><code>text-align</code></td>
+            <td><code>left</code>, <code>center</code>, <code>right</code>, <code>justify</code></td>
+            <td>Alinhamento horizontal.</td>
+          </tr>
+          <tr>
+            <td><code>text-decoration</code></td>
+            <td><code>none</code>, <code>underline</code>, <code>line-through</code></td>
+            <td>Sublinhado, riscado.</td>
+          </tr>
+          <tr>
+            <td><code>text-transform</code></td>
+            <td><code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code></td>
+            <td>Transforma maiúsculas/minúsculas sem alterar o HTML.</td>
+          </tr>
+          <tr>
+            <td><code>text-indent</code></td>
+            <td><code>20px</code></td>
+            <td>Avanço da primeira linha do parágrafo.</td>
+          </tr>
+          <tr>
+            <td><code>text-shadow</code></td>
+            <td><code>2px 2px 4px black</code></td>
+            <td>Aplica sombra ao texto (deslocamento X, Y, desfoque, cor).</td>
+          </tr>
+          <tr>
+            <td><code>line-height</code></td>
+            <td><code>1.6</code>, <code>24px</code></td>
+            <td>Altura de cada linha. Valores sem unidade são proporcionais ao font-size.</td>
+          </tr>
+          <tr>
+            <td><code>letter-spacing</code></td>
+            <td><code>1px</code>, <code>normal</code></td>
+            <td>Espaço entre letras.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>🎨 Cores em CSS: três formas de escrever o mesmo</h3>
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Formato</th>
+            <th>Exemplo</th>
+            <th>Vantagem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Nome</strong></td>
+            <td><code>red</code>, <code>blue</code>, <code>teal</code></td>
+            <td>Rápido para testes e cores comuns.</td>
+          </tr>
+          <tr>
+            <td><strong>Hexadecimal</strong></td>
+            <td><code>#ff0000</code>, <code>#AABBCC</code></td>
+            <td>Padrão profissional. Permite 16,7 milhões de combinações.</td>
+          </tr>
+          <tr>
+            <td><strong>RGB / RGBA</strong></td>
+            <td><code>rgb(255,0,0)</code>, <code>rgba(0,0,0,0.5)</code></td>
+            <td>RGBA permite transparência (o "a" é o alfa: 0 a 1).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>🧪 Demonstração ao vivo: mude a cor do texto</h3>
+      <p>Escolha uma cor no seletor abaixo e veja o efeito em tempo real no texto:</p>
+
+      <div class="controle-cor">
+        <label for="cor-texto">Cor do texto:</label>
+        <input type="color" id="cor-texto" value="#7c3aed">
+        <div class="presets-cores">
+          <button type="button" data-cor="#7c3aed" style="background:#7c3aed;" title="Roxo"></button>
+          <button type="button" data-cor="#ec4899" style="background:#ec4899;" title="Rosa"></button>
+          <button type="button" data-cor="#0284c7" style="background:#0284c7;" title="Azul"></button>
+          <button type="button" data-cor="#16a34a" style="background:#16a34a;" title="Verde"></button>
+          <button type="button" data-cor="#d97706" style="background:#d97706;" title="Laranja"></button>
+          <button type="button" data-cor="#dc2626" style="background:#dc2626;" title="Vermelho"></button>
+          <button type="button" data-cor="#0f172a" style="background:#0f172a;" title="Preto"></button>
+        </div>
+      </div>
+
+      <div class="demo-aovivo">
+        <div class="demo-topo">
+          <span>demo-ao-vivo.html</span>
+          <span id="demo-codigo">color: #7c3aed;</span>
+        </div>
+        <div class="demo-corpo">
+          <div class="alvo-demo" id="alvo-demo" style="color:#7c3aed;font-size:1.2rem;font-weight:700;">
+            Este texto muda de cor conforme você escolhe acima
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 5 — BOX MODEL ============ -->
+  <div id="aba-box" class="tab-content">
+    <section class="card">
+      <h2>📦 O Box Model — o modelo de caixas</h2>
+
+      <p>Todo elemento HTML renderizado na página é uma <strong>caixa retangular</strong>. Essa é uma das ideias mais importantes do CSS: por baixo, tudo é uma caixa. E toda caixa tem quatro camadas concêntricas:</p>
+
+      <div class="boxmodel-visual">
+        <div class="boxmodel-container">
+          <div class="boxmodel-border">
+            <div class="boxmodel-padding">
+              <div class="boxmodel-content">
+                O conteúdo do elemento
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Camada</th>
+            <th>Propriedade CSS</th>
+            <th>Função</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Content</strong></td>
+            <td><code>width</code>, <code>height</code></td>
+            <td>O conteúdo em si: texto, imagem, vídeo.</td>
+          </tr>
+          <tr>
+            <td><strong>Padding</strong></td>
+            <td><code>padding</code></td>
+            <td>Espaço <em>dentro</em> da borda, entre a borda e o conteúdo.</td>
+          </tr>
+          <tr>
+            <td><strong>Border</strong></td>
+            <td><code>border</code></td>
+            <td>A linha visível em volta do padding.</td>
+          </tr>
+          <tr>
+            <td><strong>Margin</strong></td>
+            <td><code>margin</code></td>
+            <td>Espaço <em>fora</em> da borda, entre a caixa e as caixas vizinhas.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box blue">
+        <strong>💡 Regra mnemônica:</strong> de dentro para fora: <strong>C</strong>ontent → <strong>P</strong>adding → <strong>B</strong>order → <strong>M</strong>argin. Resumido como "<strong>C-P-B-M</strong>".
+      </div>
+
+      <h3>📏 Sintaxe abreviada de margin e padding</h3>
+      <p>As propriedades <code>margin</code> e <code>padding</code> aceitam de um a quatro valores, e a ordem importa:</p>
+
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Escrita</th>
+            <th>Aplicação</th>
+            <th>Exemplo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>padding: 10px;</code></td>
+            <td>10px nos quatro lados</td>
+            <td>Atalho para todos</td>
+          </tr>
+          <tr>
+            <td><code>padding: 0 20px;</code></td>
+            <td>0 no topo/baixo, 20px nos lados</td>
+            <td>Vertical | Horizontal</td>
+          </tr>
+          <tr>
+            <td><code>padding: 0 20px 20px;</code></td>
+            <td>0 no topo, 20px nos lados, 20px embaixo</td>
+            <td>Topo | Horizontal | Base</td>
+          </tr>
+          <tr>
+            <td><code>padding: 0 20px 20px 20px;</code></td>
+            <td>Individual por lado</td>
+            <td>Topo | Direita | Base | Esquerda</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box amber">
+        <strong>⚠️ A ordem do relógio:</strong> quando há quatro valores, a ordem é <strong>topo → direita → baixo → esquerda</strong> (sentido horário, começando pelo topo).
+      </div>
+
+      <h3>🔍 A técnica do <code>margin: 0 auto</code></h3>
+      <p>Para centralizar uma caixa horizontalmente na página, o padrão é usar <code>margin: 0 auto</code>. O <code>auto</code> divide o espaço horizontal sobrando igualmente entre esquerda e direita:</p>
+      <div class="anatomia-css"><span class="tok-sel">body</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">width</span><span class="tok-punct">:</span> <span class="tok-val">600px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">margin</span><span class="tok-punct">:</span> <span class="tok-val">0 auto</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      <p>Isso faz o body ter 600 pixels de largura, colado no topo (<code>0</code>) e centralizado horizontalmente (<code>auto</code>).</p>
+
+      <h3>📝 A propriedade border completa</h3>
+      <p>O <code>border</code> aceita três valores separados por espaço:</p>
+      <div class="anatomia-css"><span class="tok-prop">border</span><span class="tok-punct">:</span> <span class="tok-val">3px solid black</span><span class="tok-punct">;</span></div>
+      <ul>
+        <li><strong>Espessura:</strong> <code>1px</code>, <code>3px</code>, <code>thin</code>, <code>medium</code>, <code>thick</code>.</li>
+        <li><strong>Estilo:</strong> <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>double</code>, <code>none</code>.</li>
+        <li><strong>Cor:</strong> <code>black</code>, <code>#c2410c</code>, <code>rgba(0,0,0,0.5)</code>.</li>
+      </ul>
+
+      <h3>🎨 Box model aplicado à prática</h3>
+      <p>Um cartão bem estruturado usa o box model assim:</p>
+      <div class="anatomia-css"><span class="tok-sel">.card</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">width</span><span class="tok-punct">:</span> <span class="tok-val">400px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">padding</span><span class="tok-punct">:</span> <span class="tok-val">24px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">border</span><span class="tok-punct">:</span> <span class="tok-val">2px solid #c2410c</span><span class="tok-punct">;</span>
+  <span class="tok-prop">margin</span><span class="tok-punct">:</span> <span class="tok-val">20px auto</span><span class="tok-punct">;</span>
+  <span class="tok-prop">background-color</span><span class="tok-punct">:</span> <span class="tok-val">#fff7ed</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      <p>Cartão de 400px de largura, com 24px de espaço interno (padding), borda laranja de 2px, 20px de margem em cima e embaixo, e centralizado na horizontal.</p>
+
+      <div class="highlight-box green">
+        <strong>✅ Exercício mental:</strong> se uma caixa tem <code>width: 200px</code>, <code>padding: 20px</code> e <code>border: 5px solid black</code>, qual é a largura total ocupada na tela? <br>
+        <strong>Resposta:</strong> 200 + 20 + 20 + 5 + 5 = <strong>250px</strong>. Padding e border somam <em>por fora</em> do width.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 6 — LABORATÓRIO ============ -->
+  <div id="aba-lab" class="tab-content">
+    <section class="card">
+      <h2>💻 Laboratório: construindo conhecimento na prática</h2>
+
+      <p>Este laboratório traz uma página HTML completa, estilizada com CSS real. Cada linha é explicada, e você pode copiar, pré-visualizar ou baixar o arquivo para experimentar.</p>
+
+      <h3>📐 Etapas de construção</h3>
+
+      <div class="etapa-card" data-etapa="ETAPA 1" data-num="1">
+        <h3>Criar o arquivo CSS externo</h3>
+        <p>Na prática profissional, o CSS vai em um arquivo separado (<code>estilo.css</code>) e é conectado ao HTML por meio de uma tag <code>&lt;link&gt;</code> dentro do <code>&lt;head&gt;</code>:</p>
+        <div class="anatomia-css"><span class="tok-punct">&lt;</span><span class="tok-tag">link</span> <span class="tok-attr">rel</span><span class="tok-punct">=</span><span class="tok-string">"stylesheet"</span> <span class="tok-attr">href</span><span class="tok-punct">=</span><span class="tok-string">"estilo.css"</span><span class="tok-punct">&gt;</span></div>
+        <p>O atributo <code>rel="stylesheet"</code> diz ao navegador que ele vai encontrar ali uma folha de estilo. O <code>href</code> aponta para o arquivo.</p>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 2" data-num="2">
+        <h3>Estilizar o fundo e o corpo</h3>
+        <p>O <code>html</code> controla o fundo de toda a "tela virtual", mesmo além do conteúdo. O <code>body</code> controla a área visível da página.</p>
+        <div class="anatomia-css"><span class="tok-sel">html</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">background-color</span><span class="tok-punct">:</span> <span class="tok-val">#424142</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span>
+<span class="tok-sel">body</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">width</span><span class="tok-punct">:</span> <span class="tok-val">600px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">margin</span><span class="tok-punct">:</span> <span class="tok-val">0 auto</span><span class="tok-punct">;</span>
+  <span class="tok-prop">background-color</span><span class="tok-punct">:</span> <span class="tok-val">#0e4d58</span><span class="tok-punct">;</span>
+  <span class="tok-prop">padding</span><span class="tok-punct">:</span> <span class="tok-val">0 20px 20px 20px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">border</span><span class="tok-punct">:</span> <span class="tok-val">3px solid black</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 3" data-num="3">
+        <h3>Estilizar o título</h3>
+        <p>Fonte com fallback, cor laranja, sombra preta e texto centralizado:</p>
+        <div class="anatomia-css"><span class="tok-sel">h1</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">margin</span><span class="tok-punct">:</span> <span class="tok-val">0</span><span class="tok-punct">;</span>
+  <span class="tok-prop">padding</span><span class="tok-punct">:</span> <span class="tok-val">20px 0</span><span class="tok-punct">;</span>
+  <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">#f08902</span><span class="tok-punct">;</span>
+  <span class="tok-prop">text-shadow</span><span class="tok-punct">:</span> <span class="tok-val">2px 2px 2px black</span><span class="tok-punct">;</span>
+  <span class="tok-prop">text-align</span><span class="tok-punct">:</span> <span class="tok-val">center</span><span class="tok-punct">;</span>
+  <span class="tok-prop">font-family</span><span class="tok-punct">:</span> <span class="tok-val">Cambria, Georgia, serif</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 4" data-num="4">
+        <h3>Estilizar a imagem</h3>
+        <p>Imagens são elementos <em>inline</em> por padrão, o que as impede de centralizar com <code>margin: auto</code>. Para centralizar, use <code>display: block</code>:</p>
+        <div class="anatomia-css"><span class="tok-sel">img</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">display</span><span class="tok-punct">:</span> <span class="tok-val">block</span><span class="tok-punct">;</span>
+  <span class="tok-prop">margin</span><span class="tok-punct">:</span> <span class="tok-val">0 auto</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+        <div class="highlight-box amber">
+          <strong>⚠️ Conceito de bloco vs inline:</strong> elementos de bloco ocupam toda a largura disponível e aceitam margem. Elementos inline (<code>img</code>, <code>span</code>, <code>a</code>) só ocupam o próprio conteúdo e <em>não</em> aceitam margem automática. O <code>display: block</code> força a mudança.
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 5" data-num="5">
+        <h3>Estilizar os parágrafos</h3>
+        <p>Texto justificado, branco, sombra e fonte sem serifa:</p>
+        <div class="anatomia-css"><span class="tok-sel">p</span> <span class="tok-punct">{</span>
+  <span class="tok-prop">margin</span><span class="tok-punct">:</span> <span class="tok-val">25px 25px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">padding</span><span class="tok-punct">:</span> <span class="tok-val">25px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">text-align</span><span class="tok-punct">:</span> <span class="tok-val">justify</span><span class="tok-punct">;</span>
+  <span class="tok-prop">font-size</span><span class="tok-punct">:</span> <span class="tok-val">25px</span><span class="tok-punct">;</span>
+  <span class="tok-prop">color</span><span class="tok-punct">:</span> <span class="tok-val">white</span><span class="tok-punct">;</span>
+  <span class="tok-prop">text-shadow</span><span class="tok-punct">:</span> <span class="tok-val">2px 2px 1px black</span><span class="tok-punct">;</span>
+  <span class="tok-prop">font-family</span><span class="tok-punct">:</span> <span class="tok-val">Verdana, Geneva, Tahoma, sans-serif</span><span class="tok-punct">;</span>
+<span class="tok-punct">}</span></div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 6" data-num="6">
+        <h3>Testar a renderização</h3>
+        <p>Baixe os dois arquivos abaixo (<code>index.html</code> e <code>estilo.css</code>), coloque-os na mesma pasta, abra o HTML no navegador e confira o resultado. Depois altere uma cor, salve e atualize para ver o efeito.</p>
+      </div>
+
+      <h3>📄 Código completo: index.html</h3>
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span class="code-title">index.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="html">📋 Copiar</button>
+            <button type="button" class="download-btn" data-download="html">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-pane" id="codigo-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;link rel="stylesheet" href="estilo.css"&gt;
+  &lt;title&gt;Estilos em CSS&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Aplicando Folhas de Estilo no HTML&lt;/h1&gt;
+  &lt;img src="logo.png" alt="imagem logo"&gt;
+  &lt;p&gt;Assim como o HTML, o CSS não é realmente uma linguagem de programação. Também não é uma linguagem de marcação — é uma linguagem de folhas de estilo. Isso significa que o CSS permite aplicar estilos seletivamente a elementos em documentos HTML.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+
+      <h3>🎨 Código completo: estilo.css</h3>
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span class="code-title">estilo.css</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="css">📋 Copiar</button>
+            <button type="button" class="download-btn" data-download="css">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-pane" id="codigo-css">/* ALTERANDO A COR DE FUNDO */
+html {
+  background-color: #424142;
+}
+
+body {
+  width: 600px;
+  margin: 0 auto;
+  background-color: #0e4d58;
+  padding: 0 20px 20px 20px;
+  border: 3px solid black;
+}
+
+h1 {
+  margin: 0;
+  padding: 20px 0;
+  color: #f08902;
+  text-shadow: 2px 2px 2px black;
+  text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+}
+
+p {
+  margin: 25px 25px;
+  padding: 25px;
+  text-align: justify;
+  font-size: 25px;
+  color: white;
+  text-shadow: 2px 2px 1px black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}</div>
+      </div>
+
+      <h3>🧪 Preview do resultado (arquivo único)</h3>
+      <p>Para facilitar, também preparamos a versão consolidada com CSS inline dentro do HTML. Clique em preview para rodar:</p>
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span class="code-title">index-completo.html</span>
+          <div class="code-actions">
+            <button type="button" class="copy-btn" data-copiar="completo">📋 Copiar</button>
+            <button type="button" class="run-inline-btn" data-preview="completo">🧪 Preview</button>
+            <button type="button" class="download-btn" data-download="completo">⬇️ Baixar</button>
+          </div>
+        </div>
+        <div class="code-pane" id="codigo-completo">&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Estilos em CSS — versão única&lt;/title&gt;
+  &lt;style&gt;
+    html {
+      background-color: #424142;
+    }
+    body {
+      width: 600px;
+      margin: 0 auto;
+      background-color: #0e4d58;
+      padding: 0 20px 20px 20px;
+      border: 3px solid black;
+    }
+    h1 {
+      margin: 0;
+      padding: 20px 0;
+      color: #f08902;
+      text-shadow: 2px 2px 2px black;
+      text-align: center;
+      font-family: Cambria, Georgia, serif;
+    }
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+    p {
+      margin: 25px 0;
+      padding: 25px;
+      text-align: justify;
+      font-size: 20px;
+      color: white;
+      text-shadow: 2px 2px 1px black;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Aplicando Folhas de Estilo no HTML&lt;/h1&gt;
+  &lt;img src="https://picsum.photos/id/0/400/120" alt="imagem logo"&gt;
+  &lt;p&gt;Assim como o HTML, o CSS não é realmente uma linguagem de programação. Também não é uma linguagem de marcação — é uma linguagem de folhas de estilo. Isso significa que o CSS permite aplicar estilos seletivamente a elementos em documentos HTML.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div id="preview-completo"></div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 7 — AVALIAÇÃO ============ -->
+  <div id="aba-avaliacao" class="tab-content active">
+    <section class="card">
+      <h2>📋 Avaliação de fixação</h2>
+      <p>Dez questões com feedback imediato. Ao finalizar, você recebe o resultado consolidado.</p>
+
+      <div class="quiz-header">
+        <span class="progresso-texto">Progresso: <strong id="txt-progresso-css">10 de 10</strong></span>
+        <div class="barra-quiz"><div class="barra-quiz-preenchimento" id="fill-progresso-css" style="width: 100%;"></div></div>
+      </div>
+
+      <div id="container-questoes-css"><div class="question" id="css-q1"><div class="question-header"><span class="question-number">1</span><div>O que significa a sigla "CSS"?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q1" value="a"><label><strong>a)</strong> Creative Style Sheets</label></div><div class="option disabled" data-letra="b"><input type="radio" name="css-q1" value="b"><label><strong>b)</strong> Computer Style Sheets</label></div><div class="option disabled correct" data-letra="c"><input type="radio" name="css-q1" value="c"><label><strong>c)</strong> Cascading Style Sheets — Folhas de Estilo em Cascata</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q1" value="d"><label><strong>d)</strong> Content Style Sheets</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q1">✅ <strong>Correto!</strong> A sigla significa Cascading Style Sheets. Traduzido: Folhas de Estilo em Cascata.</div></div><div class="question" id="css-q2"><div class="question-header"><span class="question-number">2</span><div>Qual é a principal função do CSS em desenvolvimento web?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q2" value="a"><label><strong>a)</strong> Estruturar o conteúdo semântico da página.</label></div><div class="option disabled correct" data-letra="b"><input type="radio" name="css-q2" value="b"><label><strong>b)</strong> Definir a aparência e o layout dos elementos HTML.</label></div><div class="option disabled" data-letra="c"><input type="radio" name="css-q2" value="c"><label><strong>c)</strong> Controlar a lógica de servidor e banco de dados.</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q2" value="d"><label><strong>d)</strong> Executar animações complexas com laços de repetição.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q2">✅ <strong>Correto!</strong> O CSS cuida da apresentação: cores, fontes, tamanhos, posições, margens. Estrutura fica por conta do HTML, comportamento por conta do JavaScript.</div></div><div class="question" id="css-q3"><div class="question-header"><span class="question-number">3</span><div>Como você aplica uma folha de estilo externa a um documento HTML?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q3" value="a"><label><strong>a)</strong> Com o atributo style no .</label></div><div class="option disabled" data-letra="b"><input type="radio" name="css-q3" value="b"><label><strong>b)</strong> Com uma tag <style> contendo o caminho do arquivo.</style></label></div><div class="option disabled correct" data-letra="c"><input type="radio" name="css-q3" value="c"><label><strong>c)</strong> Com a tag <link rel="stylesheet" href="./🎨 TEMA 06 • CSS — Folhas de Estilo em Cascata_files/caminho.css"> no .</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q3" value="d"><label><strong>d)</strong> Não é possível usar arquivo externo em HTML.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q3">✅ <strong>Correto!</strong> A tag <link rel="stylesheet" href="./🎨 TEMA 06 • CSS — Folhas de Estilo em Cascata_files/saved_resource"> dentro do  é a forma padrão de conectar uma folha de estilo externa ao HTML.</div></div><div class="question" id="css-q4"><div class="question-header"><span class="question-number">4</span><div>O que é uma "regra CSS"?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q4" value="a"><label><strong>a)</strong> Um comando de terminal do Linux.</label></div><div class="option disabled" data-letra="b"><input type="radio" name="css-q4" value="b"><label><strong>b)</strong> Uma instrução JavaScript que manipula o DOM.</label></div><div class="option disabled correct" data-letra="c"><input type="radio" name="css-q4" value="c"><label><strong>c)</strong> Um conjunto formado por um seletor + um bloco de declarações (propriedade: valor).</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q4" value="d"><label><strong>d)</strong> Uma tag HTML especial de formatação.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q4">✅ <strong>Correto!</strong> Uma regra CSS tem sempre a forma: seletor { propriedade: valor; propriedade: valor; }. É a unidade básica do CSS.</div></div><div class="question" id="css-q5"><div class="question-header"><span class="question-number">5</span><div>Qual é a finalidade do seletor em uma regra CSS?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q5" value="a"><label><strong>a)</strong> Definir a cor de fundo da página.</label></div><div class="option disabled correct" data-letra="b"><input type="radio" name="css-q5" value="b"><label><strong>b)</strong> Indicar quais elementos HTML receberão aquela regra.</label></div><div class="option disabled" data-letra="c"><input type="radio" name="css-q5" value="c"><label><strong>c)</strong> Aplicar animações automáticas.</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q5" value="d"><label><strong>d)</strong> Criar um banco de dados secundário.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q5">✅ <strong>Correto!</strong> O seletor escolhe o alvo: pode ser um elemento (p), uma classe (.destaque), um ID (#titulo), um atributo (img[src]) ou um estado (a:hover).</div></div><div class="question" id="css-q6"><div class="question-header"><span class="question-number">6</span><div>Qual propriedade CSS altera a cor do texto de um elemento?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q6" value="a"><label><strong>a)</strong> text-color</label></div><div class="option disabled" data-letra="b"><input type="radio" name="css-q6" value="b"><label><strong>b)</strong> font-color</label></div><div class="option disabled correct" data-letra="c"><input type="radio" name="css-q6" value="c"><label><strong>c)</strong> color</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q6" value="d"><label><strong>d)</strong> background-color</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q6">✅ <strong>Correto!</strong> A propriedade correta é "color". "background-color" altera o fundo, não o texto.</div></div><div class="question" id="css-q7"><div class="question-header"><span class="question-number">7</span><div>O que é "herança" em CSS?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q7" value="a"><label><strong>a)</strong> Um elemento HTML que pertence a várias classes ao mesmo tempo.</label></div><div class="option disabled" data-letra="b"><input type="radio" name="css-q7" value="b"><label><strong>b)</strong> A propriedade CSS que se aplica apenas a elementos aninhados.</label></div><div class="option disabled correct" data-letra="c"><input type="radio" name="css-q7" value="c"><label><strong>c)</strong> O processo pelo qual os estilos CSS de um elemento pai são passados aos filhos, a menos que sejam substituídos.</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q7" value="d"><label><strong>d)</strong> A ordem em que as regras são declaradas no arquivo.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q7">✅ <strong>Correto!</strong> Herança: elementos filhos herdam propriedades do pai. Se o  tem color: white, todo texto dentro dele também será branco, até que uma regra mais específica substitua.</div></div><div class="question" id="css-q8"><div class="question-header"><span class="question-number">8</span><div>Qual é o símbolo usado para identificar uma classe CSS em uma regra?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q8" value="a"><label><strong>a)</strong> #</label></div><div class="option disabled correct" data-letra="b"><input type="radio" name="css-q8" value="b"><label><strong>b)</strong> .</label></div><div class="option disabled" data-letra="c"><input type="radio" name="css-q8" value="c"><label><strong>c)</strong> :</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q8" value="d"><label><strong>d)</strong> $</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q8">✅ <strong>Correto!</strong> Classe: .nome (ponto). ID: #nome (sustenido).</div></div><div class="question" id="css-q9"><div class="question-header"><span class="question-number">9</span><div>Qual é a função da propriedade CSS font-size?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q9" value="a"><label><strong>a)</strong> Define a cor da fonte.</label></div><div class="option disabled correct" data-letra="b"><input type="radio" name="css-q9" value="b"><label><strong>b)</strong> Define o tamanho da fonte.</label></div><div class="option disabled" data-letra="c"><input type="radio" name="css-q9" value="c"><label><strong>c)</strong> Define o estilo (normal ou itálico) da fonte.</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q9" value="d"><label><strong>d)</strong> Define a família (Arial, Verdana...) da fonte.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q9">✅ <strong>Correto!</strong> font-size controla o tamanho do texto. Valores comuns: 16px, 1rem, large.</div></div><div class="question" id="css-q10"><div class="question-header"><span class="question-number">10</span><div>O que significa a sigla "CSS3" em relação ao desenvolvimento web?</div></div><div class="options"><div class="option disabled" data-letra="a"><input type="radio" name="css-q10" value="a"><label><strong>a)</strong> A terceira versão do navegador Chrome.</label></div><div class="option disabled" data-letra="b"><input type="radio" name="css-q10" value="b"><label><strong>b)</strong> A terceira geração de linguagens de programação para web.</label></div><div class="option disabled correct" data-letra="c"><input type="radio" name="css-q10" value="c"><label><strong>c)</strong> A terceira especificação do CSS, que introduziu recursos avançados como animações, gradientes e transições.</label></div><div class="option disabled" data-letra="d"><input type="radio" name="css-q10" value="d"><label><strong>d)</strong> A terceira versão do HTML.</label></div></div><div class="feedback-imediato mostrar ok" id="feed-css-q10">✅ <strong>Correto!</strong> CSS3 trouxe animações, gradientes, transições, sombras complexas e outras capacidades que antes exigiam imagens ou JavaScript.</div></div></div>
+
+      <div class="btn-grupo">
+        <button type="button" class="btn" id="btn-finalizar-css">✅ Ver resultado</button>
+        <button type="button" class="btn btn-secondary" id="btn-limpar-css">🔄 Limpar</button>
+      </div>
+
+      <div class="results mostrar" id="resultado-css">
+        <h4 style="color:#be185d;margin-bottom:10px;">📊 Seu resultado</h4>
+        <div id="resultado-css-conteudo"><div style="text-align:center;padding:16px;background:#f0fdf4;border-radius:10px;margin-bottom:12px;"><div style="font-size:1.6rem;font-weight:900;color:#15803d;">10 / 10</div><div style="color:#166534;font-weight:700;">Aproveitamento: 100% — 🏆 Excelente! Você domina os fundamentos do CSS.</div></div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q1 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q2 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q3 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q4 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q5 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q6 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q7 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q8 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q9 — Correta</div><div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:#15803d;font-size:.88rem;">✅ Q10 — Correta</div></div>
+      </div>
+    </section>
+  </div>
+
+  <footer style="text-align:center;color:#c4b5fd;font-size:.78rem;padding:22px 0;">
+    🎨 Programação Front-End • Tema 06: CSS — Folhas de Estilo em Cascata • 2026
+  </footer>
+</div>
+
+<div class="toast-notificacao" id="toast">✅ Feito!</div>
+<button type="button" class="btn-top" id="btn-topo">⬆️ Topo</button>
+
+<script>
+function esc(t){
+  return String(t == null ? '' : t)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ============================================================
+   CÓDIGO DE REFERÊNCIA
+   ============================================================ */
+
+var CODIGO_HTML =
+'<!DOCTYPE html>\n' +
+'<html lang="pt-BR">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <link rel="stylesheet" href="estilo.css">\n' +
+'  <title>Estilos em CSS</title>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <h1>Aplicando Folhas de Estilo no HTML</h1>\n' +
+'  <img src="logo.png" alt="imagem logo">\n' +
+'  <p>Assim como o HTML, o CSS não é realmente uma linguagem de programação. Também não é uma linguagem de marcação — é uma linguagem de folhas de estilo. Isso significa que o CSS permite aplicar estilos seletivamente a elementos em documentos HTML.</p>\n' +
+'</body>\n' +
+'</html>';
+
+var CODIGO_CSS =
+'/* ALTERANDO A COR DE FUNDO */\n' +
+'html {\n' +
+'  background-color: #424142;\n' +
+'}\n' +
+'\n' +
+'body {\n' +
+'  width: 600px;\n' +
+'  margin: 0 auto;\n' +
+'  background-color: #0e4d58;\n' +
+'  padding: 0 20px 20px 20px;\n' +
+'  border: 3px solid black;\n' +
+'}\n' +
+'\n' +
+'h1 {\n' +
+'  margin: 0;\n' +
+'  padding: 20px 0;\n' +
+'  color: #f08902;\n' +
+'  text-shadow: 2px 2px 2px black;\n' +
+'  text-align: center;\n' +
+'  font-family: Cambria, Cochin, Georgia, Times, \'Times New Roman\', serif;\n' +
+'}\n' +
+'\n' +
+'img {\n' +
+'  display: block;\n' +
+'  margin: 0 auto;\n' +
+'}\n' +
+'\n' +
+'p {\n' +
+'  margin: 25px 25px;\n' +
+'  padding: 25px;\n' +
+'  text-align: justify;\n' +
+'  font-size: 25px;\n' +
+'  color: white;\n' +
+'  text-shadow: 2px 2px 1px black;\n' +
+'  font-family: Verdana, Geneva, Tahoma, sans-serif;\n' +
+'}';
+
+var CODIGO_COMPLETO =
+'<!DOCTYPE html>\n' +
+'<html lang="pt-BR">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <title>Estilos em CSS — versão única</title>\n' +
+'  <style>\n' +
+'    html {\n' +
+'      background-color: #424142;\n' +
+'    }\n' +
+'    body {\n' +
+'      width: 600px;\n' +
+'      margin: 0 auto;\n' +
+'      background-color: #0e4d58;\n' +
+'      padding: 0 20px 20px 20px;\n' +
+'      border: 3px solid black;\n' +
+'    }\n' +
+'    h1 {\n' +
+'      margin: 0;\n' +
+'      padding: 20px 0;\n' +
+'      color: #f08902;\n' +
+'      text-shadow: 2px 2px 2px black;\n' +
+'      text-align: center;\n' +
+'      font-family: Cambria, Georgia, serif;\n' +
+'    }\n' +
+'    img {\n' +
+'      display: block;\n' +
+'      margin: 0 auto;\n' +
+'      max-width: 100%;\n' +
+'    }\n' +
+'    p {\n' +
+'      margin: 25px 0;\n' +
+'      padding: 25px;\n' +
+'      text-align: justify;\n' +
+'      font-size: 20px;\n' +
+'      color: white;\n' +
+'      text-shadow: 2px 2px 1px black;\n' +
+'      font-family: Verdana, Geneva, Tahoma, sans-serif;\n' +
+'    }\n' +
+'  </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'  <h1>Aplicando Folhas de Estilo no HTML</h1>\n' +
+'  <img src="https://picsum.photos/id/0/400/120" alt="imagem logo">\n' +
+'  <p>Assim como o HTML, o CSS não é realmente uma linguagem de programação. Também não é uma linguagem de marcação — é uma linguagem de folhas de estilo. Isso significa que o CSS permite aplicar estilos seletivamente a elementos em documentos HTML.</p>\n' +
+'</body>\n' +
+'</html>';
+
+/* ============================================================
+   BANCO DE QUESTÕES
+   ============================================================ */
+
+var QUESTOES_CSS = [
+  {
+    pergunta: 'O que significa a sigla "CSS"?',
+    opcoes: [
+      { l:'a', t:'Creative Style Sheets' },
+      { l:'b', t:'Computer Style Sheets' },
+      { l:'c', t:'Cascading Style Sheets — Folhas de Estilo em Cascata' },
+      { l:'d', t:'Content Style Sheets' }
+    ],
+    correta:'c',
+    explicacao:'A sigla significa Cascading Style Sheets. Traduzido: Folhas de Estilo em Cascata.'
+  },
+  {
+    pergunta: 'Qual é a principal função do CSS em desenvolvimento web?',
+    opcoes: [
+      { l:'a', t:'Estruturar o conteúdo semântico da página.' },
+      { l:'b', t:'Definir a aparência e o layout dos elementos HTML.' },
+      { l:'c', t:'Controlar a lógica de servidor e banco de dados.' },
+      { l:'d', t:'Executar animações complexas com laços de repetição.' }
+    ],
+    correta:'b',
+    explicacao:'O CSS cuida da apresentação: cores, fontes, tamanhos, posições, margens. Estrutura fica por conta do HTML, comportamento por conta do JavaScript.'
+  },
+  {
+    pergunta: 'Como você aplica uma folha de estilo externa a um documento HTML?',
+    opcoes: [
+      { l:'a', t:'Com o atributo style no <body>.' },
+      { l:'b', t:'Com uma tag <style> contendo o caminho do arquivo.' },
+      { l:'c', t:'Com a tag <link rel="stylesheet" href="caminho.css"> no <head>.' },
+      { l:'d', t:'Não é possível usar arquivo externo em HTML.' }
+    ],
+    correta:'c',
+    explicacao:'A tag <link rel="stylesheet" href="..."> dentro do <head> é a forma padrão de conectar uma folha de estilo externa ao HTML.'
+  },
+  {
+    pergunta: 'O que é uma "regra CSS"?',
+    opcoes: [
+      { l:'a', t:'Um comando de terminal do Linux.' },
+      { l:'b', t:'Uma instrução JavaScript que manipula o DOM.' },
+      { l:'c', t:'Um conjunto formado por um seletor + um bloco de declarações (propriedade: valor).' },
+      { l:'d', t:'Uma tag HTML especial de formatação.' }
+    ],
+    correta:'c',
+    explicacao:'Uma regra CSS tem sempre a forma: seletor { propriedade: valor; propriedade: valor; }. É a unidade básica do CSS.'
+  },
+  {
+    pergunta: 'Qual é a finalidade do seletor em uma regra CSS?',
+    opcoes: [
+      { l:'a', t:'Definir a cor de fundo da página.' },
+      { l:'b', t:'Indicar quais elementos HTML receberão aquela regra.' },
+      { l:'c', t:'Aplicar animações automáticas.' },
+      { l:'d', t:'Criar um banco de dados secundário.' }
+    ],
+    correta:'b',
+    explicacao:'O seletor escolhe o alvo: pode ser um elemento (p), uma classe (.destaque), um ID (#titulo), um atributo (img[src]) ou um estado (a:hover).'
+  },
+  {
+    pergunta: 'Qual propriedade CSS altera a cor do texto de um elemento?',
+    opcoes: [
+      { l:'a', t:'text-color' },
+      { l:'b', t:'font-color' },
+      { l:'c', t:'color' },
+      { l:'d', t:'background-color' }
+    ],
+    correta:'c',
+    explicacao:'A propriedade correta é "color". "background-color" altera o fundo, não o texto.'
+  },
+  {
+    pergunta: 'O que é "herança" em CSS?',
+    opcoes: [
+      { l:'a', t:'Um elemento HTML que pertence a várias classes ao mesmo tempo.' },
+      { l:'b', t:'A propriedade CSS que se aplica apenas a elementos aninhados.' },
+      { l:'c', t:'O processo pelo qual os estilos CSS de um elemento pai são passados aos filhos, a menos que sejam substituídos.' },
+      { l:'d', t:'A ordem em que as regras são declaradas no arquivo.' }
+    ],
+    correta:'c',
+    explicacao:'Herança: elementos filhos herdam propriedades do pai. Se o <body> tem color: white, todo texto dentro dele também será branco, até que uma regra mais específica substitua.'
+  },
+  {
+    pergunta: 'Qual é o símbolo usado para identificar uma classe CSS em uma regra?',
+    opcoes: [
+      { l:'a', t:'#' },
+      { l:'b', t:'.' },
+      { l:'c', t:':' },
+      { l:'d', t:'$' }
+    ],
+    correta:'b',
+    explicacao:'Classe: .nome (ponto). ID: #nome (sustenido).'
+  },
+  {
+    pergunta: 'Qual é a função da propriedade CSS font-size?',
+    opcoes: [
+      { l:'a', t:'Define a cor da fonte.' },
+      { l:'b', t:'Define o tamanho da fonte.' },
+      { l:'c', t:'Define o estilo (normal ou itálico) da fonte.' },
+      { l:'d', t:'Define a família (Arial, Verdana...) da fonte.' }
+    ],
+    correta:'b',
+    explicacao:'font-size controla o tamanho do texto. Valores comuns: 16px, 1rem, large.'
+  },
+  {
+    pergunta: 'O que significa a sigla "CSS3" em relação ao desenvolvimento web?',
+    opcoes: [
+      { l:'a', t:'A terceira versão do navegador Chrome.' },
+      { l:'b', t:'A terceira geração de linguagens de programação para web.' },
+      { l:'c', t:'A terceira especificação do CSS, que introduziu recursos avançados como animações, gradientes e transições.' },
+      { l:'d', t:'A terceira versão do HTML.' }
+    ],
+    correta:'c',
+    explicacao:'CSS3 trouxe animações, gradientes, transições, sombras complexas e outras capacidades que antes exigiam imagens ou JavaScript.'
+  }
+];
+
+var respostas_css = {};
+
+function renderQuestoesCSS(){
+  var container = document.getElementById('container-questoes-css');
+  if (!container) return;
+  container.innerHTML = '';
+  QUESTOES_CSS.forEach(function(q, idx){
+    var div = document.createElement('div');
+    div.className = 'question';
+    div.id = 'css-q' + (idx + 1);
+    var header = document.createElement('div');
+    header.className = 'question-header';
+    header.innerHTML = '<span class="question-number">' + (idx + 1) + '</span><div>' + q.pergunta + '</div>';
+    div.appendChild(header);
+    var opts = document.createElement('div');
+    opts.className = 'options';
+    q.opcoes.forEach(function(op){
+      var opt = document.createElement('div');
+      opt.className = 'option';
+      opt.dataset.letra = op.l;
+      var radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'css-q' + (idx + 1);
+      radio.value = op.l;
+      var lbl = document.createElement('label');
+      lbl.innerHTML = '<strong>' + op.l + ')</strong> ' + op.t;
+      opt.appendChild(radio);
+      opt.appendChild(lbl);
+      opt.addEventListener('click', function(ev){ ev.preventDefault(); marcarRespostaCSS(idx + 1, op.l, opt); });
+      opts.appendChild(opt);
+    });
+    div.appendChild(opts);
+    var feed = document.createElement('div');
+    feed.className = 'feedback-imediato';
+    feed.id = 'feed-css-q' + (idx + 1);
+    div.appendChild(feed);
+    container.appendChild(div);
+  });
+}
+
+function marcarRespostaCSS(num, letra, opt){
+  if (respostas_css[num]) return;
+  var div = document.getElementById('css-q' + num);
+  if (!div) return;
+  div.querySelectorAll('.option').forEach(function(o){
+    o.classList.add('disabled');
+    var r = o.querySelector('input');
+    if (r) r.checked = false;
+  });
+  var q = QUESTOES_CSS[num - 1];
+  var acertou = (letra === q.correta);
+  var feed = document.getElementById('feed-css-q' + num);
+  if (acertou){
+    opt.classList.add('correct');
+    if (feed){ feed.classList.add('mostrar','ok'); feed.innerHTML = '✅ <strong>Correto!</strong> ' + q.explicacao; }
+  } else {
+    opt.classList.add('wrong');
+    var corretaEl = div.querySelector('.option[data-letra="' + q.correta + '"]');
+    if (corretaEl) corretaEl.classList.add('correct');
+    if (feed){ feed.classList.add('mostrar','no'); feed.innerHTML = '❌ <strong>Ainda não.</strong> ' + q.explicacao; }
+  }
+  respostas_css[num] = letra;
+  atualizarProgressoCSS();
+}
+
+function atualizarProgressoCSS(){
+  var total = QUESTOES_CSS.length;
+  var feitas = Object.keys(respostas_css).length;
+  var txt = document.getElementById('txt-progresso-css');
+  var bar = document.getElementById('fill-progresso-css');
+  var btn = document.getElementById('btn-finalizar-css');
+  if (txt) txt.textContent = feitas + ' de ' + total;
+  if (bar) bar.style.width = ((feitas / total) * 100) + '%';
+  if (btn) btn.disabled = (feitas < total);
+}
+
+function finalizarCSS(){
+  var acertos = 0;
+  QUESTOES_CSS.forEach(function(q, idx){
+    var num = idx + 1;
+    if (respostas_css[num] === q.correta) acertos++;
+  });
+  var pct = Math.round((acertos / QUESTOES_CSS.length) * 100);
+  var diag = pct >= 85 ? '🏆 Excelente! Você domina os fundamentos do CSS.'
+           : pct >= 65 ? '👏 Bom resultado. Revise o que errou.'
+           : '📖 Volte às abas 1 a 5 para reforçar a base.';
+  var html = '<div style="text-align:center;padding:16px;background:#f0fdf4;border-radius:10px;margin-bottom:12px;">' +
+               '<div style="font-size:1.6rem;font-weight:900;color:#15803d;">' + acertos + ' / ' + QUESTOES_CSS.length + '</div>' +
+               '<div style="color:#166534;font-weight:700;">Aproveitamento: ' + pct + '% — ' + diag + '</div>' +
+             '</div>';
+  QUESTOES_CSS.forEach(function(q, idx){
+    var num = idx + 1;
+    var resp = respostas_css[num] || '—';
+    var ok = (resp === q.correta);
+    html += '<div style="padding:8px 0;border-bottom:1px solid #e2e8f0;color:' + (ok ? '#15803d' : '#b91c1c') + ';font-size:.88rem;">' +
+              (ok ? '✅' : '❌') + ' Q' + num + ' — ' + (ok ? 'Correta' : 'Marcou (' + resp + '), gabarito (' + q.correta + ')') +
+            '</div>';
+  });
+  var cont = document.getElementById('resultado-css-conteudo');
+  if (cont) cont.innerHTML = html;
+  document.getElementById('resultado-css').classList.add('mostrar');
+  document.getElementById('resultado-css').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function limparCSS(){
+  if (!confirm('Limpar todas as respostas?')) return;
+  respostas_css = {};
+  document.querySelectorAll('#container-questoes-css .option').forEach(function(o){
+    o.classList.remove('correct','wrong','disabled');
+    var r = o.querySelector('input');
+    if (r) r.checked = false;
+  });
+  document.querySelectorAll('#container-questoes-css .feedback-imediato').forEach(function(f){
+    f.classList.remove('mostrar','ok','no');
+    f.innerHTML = '';
+  });
+  document.getElementById('resultado-css').classList.remove('mostrar');
+  atualizarProgressoCSS();
+}
+
+/* ============================================================
+   ABAS — TROCA
+   ============================================================ */
+function trocarAbaCSS(idAba, botao){
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
+  botao.classList.add('active');
+  var alvo = document.getElementById(idAba);
+  if (alvo) alvo.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============================================================
+   SIMULADOR DE SELETORES — agora aplica a classe .alvo-sel nos
+   elementos REAIS do HTML de exemplo
+   ============================================================ */
+function limparDestaquesSimulador(){
+  var ids = ['sim-h1','sim-p1','sim-p2','sim-a','sim-img'];
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('alvo-sel');
+  });
+}
+
+function simularSeletor(tipo){
+  limparDestaquesSimulador();
+
+  var mensagem = '';
+  var alvos = [];
+
+  if (tipo === 'p'){
+    alvos = ['sim-p1','sim-p2'];
+    mensagem = '<strong>Seletor "p"</strong> → seleciona todos os elementos <code>&lt;p&gt;</code>: os dois parágrafos foram destacados.';
+  } else if (tipo === 'id'){
+    alvos = ['sim-h1'];
+    mensagem = '<strong>Seletor "#titulo"</strong> → seleciona apenas o elemento com <code>id="titulo"</code>: no caso, o <code>h1</code>.';
+  } else if (tipo === 'classe'){
+    alvos = ['sim-p2'];
+    mensagem = '<strong>Seletor ".destaque"</strong> → seleciona apenas o parágrafo com <code>class="destaque"</code>. O parágrafo comum não entra.';
+  } else if (tipo === 'attr'){
+    alvos = ['sim-img'];
+    mensagem = '<strong>Seletor "img[src]"</strong> → seleciona todos os elementos <code>&lt;img&gt;</code> que tenham o atributo <code>src</code>: no caso, a imagem.';
+  } else if (tipo === 'hover'){
+    alvos = ['sim-a'];
+    mensagem = '<strong>Seletor "a:hover"</strong> → afeta apenas o link, e somente quando o mouse está sobre ele. O destaque em amarelo mostra o alvo; passe o mouse por cima do link para ver a cor de <code>:hover</code> (vermelho) ser aplicada.';
+  }
+
+  alvos.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.classList.add('alvo-sel');
+  });
+
+  var res = document.getElementById('resultado-seletor');
+  if (res) res.innerHTML = mensagem;
+}
+
+/* ============================================================
+   DEMO COR
+   ============================================================ */
+function aplicarCorDemo(cor){
+  var alvo = document.getElementById('alvo-demo');
+  var codigo = document.getElementById('demo-codigo');
+  var input = document.getElementById('cor-texto');
+  if (alvo) alvo.style.color = cor;
+  if (codigo) codigo.textContent = 'color: ' + cor + ';';
+  if (input) input.value = cor;
+}
+
+/* ============================================================
+   COPY / DOWNLOAD / PREVIEW
+   ============================================================ */
+function copiarFallback(texto){
+  var ta = document.createElement('textarea');
+  ta.value = texto;
+  ta.setAttribute('readonly','');
+  ta.style.position = 'fixed';
+  ta.style.top = '-1000px';
+  document.body.appendChild(ta);
+  ta.select();
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+function copiarTexto(texto, botao){
+  if (!texto) return;
+  function fim(ok){
+    if (ok){
+      toast('✅ Copiado!');
+      if (botao){
+        var orig = botao.textContent;
+        botao.textContent = '✅ Copiado!';
+        setTimeout(function(){ botao.textContent = orig; }, 1600);
+      }
+    } else toast('⚠️ Selecione e copie manualmente.');
+  }
+  if (navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(texto).then(function(){ fim(true); }).catch(function(){ fim(copiarFallback(texto)); });
+  } else fim(copiarFallback(texto));
+}
+
+function baixarArquivo(nome, conteudo, mime){
+  var blob = new Blob([conteudo], {type: (mime || 'text/plain') + ';charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = nome;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 30000);
+  toast('✅ Download iniciado.');
+}
+
+function abrirPreview(html, targetId){
+  var alvo = document.getElementById(targetId);
+  if (!alvo) return;
+  var antigo = alvo.querySelector('.preview-inline');
+  if (antigo) antigo.remove();
+  var caixa = document.createElement('div');
+  caixa.className = 'preview-inline';
+  var header = document.createElement('div');
+  header.className = 'preview-header';
+  header.innerHTML = '<span>🧪 Preview — index-completo.html</span>';
+  var fechar = document.createElement('button');
+  fechar.type = 'button';
+  fechar.className = 'preview-close';
+  fechar.textContent = '✕ Fechar';
+  header.appendChild(fechar);
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('sandbox','allow-scripts allow-same-origin allow-forms');
+  iframe.setAttribute('title','Preview');
+  iframe.srcdoc = html;
+  caixa.appendChild(header);
+  caixa.appendChild(iframe);
+  alvo.appendChild(caixa);
+  fechar.addEventListener('click', function(){ caixa.remove(); });
+  caixa.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+var toastTimer = null;
+function toast(msg){
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.style.display = 'block';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.style.display = 'none'; }, 3200);
+}
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', function(){
+
+  var preHtml = document.getElementById('codigo-html');
+  if (preHtml) preHtml.textContent = CODIGO_HTML;
+  var preCss = document.getElementById('codigo-css');
+  if (preCss) preCss.textContent = CODIGO_CSS;
+  var preCompleto = document.getElementById('codigo-completo');
+  if (preCompleto) preCompleto.textContent = CODIGO_COMPLETO;
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ trocarAbaCSS(btn.dataset.aba, btn); });
+  });
+
+  document.querySelectorAll('[data-copiar="html"]').forEach(function(b){ b.addEventListener('click', function(){ copiarTexto(CODIGO_HTML, b); }); });
+  document.querySelectorAll('[data-copiar="css"]').forEach(function(b){ b.addEventListener('click', function(){ copiarTexto(CODIGO_CSS, b); }); });
+  document.querySelectorAll('[data-copiar="completo"]').forEach(function(b){ b.addEventListener('click', function(){ copiarTexto(CODIGO_COMPLETO, b); }); });
+  document.querySelectorAll('[data-download="html"]').forEach(function(b){ b.addEventListener('click', function(){ baixarArquivo('index.html', CODIGO_HTML, 'text/html'); }); });
+  document.querySelectorAll('[data-download="css"]').forEach(function(b){ b.addEventListener('click', function(){ baixarArquivo('estilo.css', CODIGO_CSS, 'text/css'); }); });
+  document.querySelectorAll('[data-download="completo"]').forEach(function(b){ b.addEventListener('click', function(){ baixarArquivo('index-completo.html', CODIGO_COMPLETO, 'text/html'); }); });
+
+  document.querySelectorAll('[data-preview="completo"]').forEach(function(b){
+    b.addEventListener('click', function(){ abrirPreview(CODIGO_COMPLETO, 'preview-completo'); });
+  });
+
+  document.querySelectorAll('.btn-sel').forEach(function(btn){
+    btn.addEventListener('click', function(){ simularSeletor(btn.dataset.sel); });
+  });
+
+  var inputCor = document.getElementById('cor-texto');
+  if (inputCor) inputCor.addEventListener('input', function(){ aplicarCorDemo(inputCor.value); });
+  document.querySelectorAll('[data-cor]').forEach(function(btn){
+    btn.addEventListener('click', function(){ aplicarCorDemo(btn.dataset.cor); });
+  });
+
+  renderQuestoesCSS();
+  atualizarProgressoCSS();
+  var btnF = document.getElementById('btn-finalizar-css');
+  if (btnF) btnF.addEventListener('click', finalizarCSS);
+  var btnL = document.getElementById('btn-limpar-css');
+  if (btnL) btnL.addEventListener('click', limparCSS);
+
+  var btnTopo = document.getElementById('btn-topo');
+  if (btnTopo) btnTopo.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+});
+</script>
+
+</body></html>
